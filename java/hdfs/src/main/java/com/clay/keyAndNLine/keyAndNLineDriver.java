@@ -1,23 +1,33 @@
-package com.clay.mapreduce01;
+package com.clay.keyAndNLine;
 
+import com.clay.mapreduce01.WordcountDriver;
+import com.clay.mapreduce01.WordcountMapper;
+import com.clay.mapreduce01.WordcountReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.lib.input.CombineTextInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.KeyValueLineRecordReader;
+import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
-public class WordcountDriver {
+public class keyAndNLineDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
         // 1 获取配置信息以及封装任务
         Configuration configuration = new Configuration();
+
+        // 1.1设置切割符
+//        configuration.set(KeyValueLineRecordReader.KEY_VALUE_SEPERATOR, " ");
+
+
         Job job = Job.getInstance(configuration);
+
 
         // 2 设置jar加载路径
         job.setJarByClass(WordcountDriver.class);
@@ -31,12 +41,14 @@ public class WordcountDriver {
         //CombineTextInputFormat.setMaxInputSplitSize(job, 4194304);
 
         //2.2使用keyvalue
-        job.setInputFormatClass(KeyValueTextInputFormat.class);
+//        job.setInputFormatClass(KeyValueTextInputFormat.class);
+        NLineInputFormat.setNumLinesPerSplit(job,3);
+        job.setInputFormatClass(NLineInputFormat.class);
 
 
         // 3 设置map和reduce类
-        job.setMapperClass(WordcountMapper.class);
-        job.setReducerClass(WordcountReducer.class);
+        job.setMapperClass(keyAndNLineMapper.class);
+        job.setReducerClass(keyAndNlineReducer.class);
 
         // 4 设置map输出
         job.setMapOutputKeyClass(Text.class);
@@ -55,5 +67,4 @@ public class WordcountDriver {
 
         System.exit(result ? 0 : 1);
     }
-
 }

@@ -7,16 +7,16 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
-public class WordcountMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
+public  class WordcountMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
 
     Text k = new Text();
     IntWritable v = new IntWritable(1);
 
     @Override
-    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+    protected  void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         //1 获取第一行
         String line = value.toString();
-        System.out.println("map行的："+line);
+
 
         String[] words = line.split(" ");
 
