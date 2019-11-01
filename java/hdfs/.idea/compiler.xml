@@ -9,5 +9,8 @@
         <module name="hdfs" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="hdfs" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -12,4 +12,5 @@ public class SequenceFileReducer extends Reducer<Text, BytesWritable, Text, Byte
 
         context.write(key, values.iterator().next());
     }
+
 }

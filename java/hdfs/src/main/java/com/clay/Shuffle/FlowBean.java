@@ -1,4 +1,4 @@
-package com.clay.mapreduce02;
+package com.clay.Shuffle;
 
 import org.apache.hadoop.io.Writable;
 
@@ -12,7 +12,7 @@ public class FlowBean implements  Writable{
     private long downFlow;
     private long sumFlow;
     //2  反序列化时，需要反射调用空参构造函数，所以必须有
-    public FlowBean(long downFlow,long upFlow) {
+    public FlowBean(long downFlow, long upFlow) {
         super();
         this.sumFlow = downFlow+upFlow;
         this.downFlow = downFlow;
