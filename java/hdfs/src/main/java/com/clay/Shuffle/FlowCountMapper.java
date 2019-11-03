@@ -1,16 +1,16 @@
 package com.clay.Shuffle;
 
-import com.clay.mapreduce02.FlowBean;
+
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
-public class FlowCountMapper extends Mapper<LongWritable,Text,Text,FlowBean> {
+public class FlowCountMapper extends Mapper<LongWritable,Text,FlowBean,Text> {
 
-    FlowBean v = new FlowBean();
-    Text k = new Text();
+    FlowBean bean = new FlowBean();
+    Text v = new Text();
 
     @Override
     protected void map(LongWritable key, Text value, Context context)	throws IOException, InterruptedException {
@@ -18,23 +18,22 @@ public class FlowCountMapper extends Mapper<LongWritable,Text,Text,FlowBean> {
         // 1 获取一行
         String line = value.toString();
 
-        // 2 切割字段
+        // 2 截取
         String[] fields = line.split("\t");
 
         // 3 封装对象
-        // 取出手机号码
-        String phoneNum = fields[1];
+        String phoneNbr = fields[1];
+        System.out.println("number:"+phoneNbr);
+        long upFlow = Long.parseLong(fields[4]);
+        long downFlow = Long.parseLong(fields[5]);
 
-        // 取出上行流量和下行流量
-        long upFlow = Long.parseLong(fields[fields.length - 3]);
-        long downFlow = Long.parseLong(fields[fields.length - 2]);
+        bean.set(upFlow, downFlow);
+        v.set(phoneNbr);
 
-        k.set(phoneNum);
-        v.set(downFlow, upFlow);
-
-        // 4 写出
-        context.write(k, v);
+        // 4 输出
+        context.write(bean, v);
     }
+
 
 
 }

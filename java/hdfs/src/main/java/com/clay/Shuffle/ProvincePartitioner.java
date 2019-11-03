@@ -5,9 +5,9 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Partitioner;
 
 //自定义如何分区，默认分区方式是根据hashcode计算
-public class ProvincePartitioner extends Partitioner<Text,FlowBean> {
+public class ProvincePartitioner extends Partitioner<FlowBean,Text> {
     @Override
-    public int getPartition(Text key, FlowBean flowBean, int numPartitions) {
+    public int getPartition(FlowBean flowBean, Text key, int numPartitions) {
         // 1 获取电话号码的前三位
         String preNum = key.toString().substring(0, 3);
 

@@ -1,29 +1,20 @@
 package com.clay.Shuffle;
 
-import com.clay.mapreduce02.FlowBean;
+
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
-public class FlowCountReducer extends Reducer<Text, FlowBean, Text, FlowBean> {
+public class FlowCountReducer extends Reducer<FlowBean,Text, Text, FlowBean> {
 
     @Override
-    protected void reduce(Text key, Iterable<FlowBean>  values, Context context) throws IOException, InterruptedException {
-        long sum_upFlow = 0;
-        long sum_downFlow = 0;
+    protected void reduce(FlowBean key, Iterable<Text> values, Context context)	throws IOException, InterruptedException {
 
-        // 1 遍历所用bean，将其中的上行流量，下行流量分别累加
-        for (FlowBean flowBean : values) {
-            sum_upFlow += flowBean.getUpFlow();
-            sum_downFlow += flowBean.getDownFlow();
+        // 循环输出，避免总流量相同情况
+        for (Text text : values) {
+            context.write(text, key);
         }
-
-        // 2 封装对象
-        FlowBean resultBean = new FlowBean(sum_upFlow, sum_downFlow);
-        System.out.println(resultBean.toString());
-        // 3 写出
-        context.write(key, resultBean);
-
     }
+
 }

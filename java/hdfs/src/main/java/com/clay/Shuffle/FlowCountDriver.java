@@ -1,7 +1,7 @@
 package com.clay.Shuffle;
 
 
-import com.clay.mapreduce02.FlowBean;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
@@ -18,7 +18,7 @@ public class FlowCountDriver  {
         Configuration configuration = new Configuration();
         Job job = Job.getInstance(configuration);
 
-        job.setPartitionerClass(ProvincePartitioner.class);
+
 
         // 2 设置jar加载路径
         job.setJarByClass(FlowCountDriver.class);
@@ -28,16 +28,20 @@ public class FlowCountDriver  {
         job.setReducerClass(FlowCountReducer.class);
 
         // 4 设置map输出
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(FlowBean.class);
+        job.setMapOutputKeyClass(FlowBean.class);
+        job.setMapOutputValueClass(Text.class);
 
         // 5 设置最终输出kv类型
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FlowBean.class);
 
         // 6 设置输入和输出路径
-        FileInputFormat.setInputPaths(job,new Path("E:\\input\\序列化"));
-        FileOutputFormat.setOutputPath(job, new Path("E:\\output\\序列化"));
+        FileInputFormat.setInputPaths(job,new Path("E:\\input\\shuffle"));
+        FileOutputFormat.setOutputPath(job, new Path("E:\\output\\shuffle"));
+
+        job.setPartitionerClass(ProvincePartitioner.class);
+        job.setNumReduceTasks(5);
+//        job.setCombinerClass(FlowCombine.class);
 
         // 7 提交
         boolean result = job.waitForCompletion(true);
